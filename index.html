@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EX280 – Red Hat Certified System Administrator in OpenShift exam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700&family=Red+Hat+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Red Hat Text", "Helvetica Neue", Arial, sans-serif; color: #151515; background: #f0f0f0; line-height: 1.6; font-size: 16px; }
+
+  /* ── Page shell ── */
+  .page-wrapper { max-width: 1140px; margin: 0 auto; background: #fff; min-height: 100vh; }
+
+  /* ── Header area: SKU + title ── */
+  .exam-header { padding: 48px 64px 0; }
+  .exam-sku { font-family: "Red Hat Display", sans-serif; font-size: 15px; font-weight: 600; color: #6a6e73; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .exam-title { font-family: "Red Hat Display", sans-serif; font-size: 36px; font-weight: 700; color: #151515; line-height: 1.2; margin-bottom: 32px; }
+
+  /* ── Top-level horizontal tabs ── */
+  .tabs-wrapper input[type="radio"].top-radio { display: none; }
+
+  .top-tab-bar { display: flex; gap: 0; border-bottom: 1px solid #d2d2d2; padding: 0 64px; background: #fff; }
+  .top-tab-bar label {
+    padding: 16px 24px;
+    font-family: "Red Hat Text", sans-serif;
+    font-size: 15px; font-weight: 500;
+    color: #6a6e73; cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+    transition: color .15s, border-color .15s;
+  }
+  .top-tab-bar label:hover { color: #151515; }
+
+  #top-overview:checked ~ .top-tab-bar label[for="top-overview"],
+  #top-readiness:checked ~ .top-tab-bar label[for="top-readiness"],
+  #top-whatsnext:checked ~ .top-tab-bar label[for="top-whatsnext"] {
+    color: #ee0000; font-weight: 600; border-bottom-color: #ee0000;
+  }
+
+  .tab-panel { display: none; padding: 40px 64px 64px; }
+  #top-overview:checked  ~ .tab-panel.panel-overview,
+  #top-readiness:checked ~ .tab-panel.panel-readiness,
+  #top-whatsnext:checked ~ .tab-panel.panel-whatsnext { display: block; }
+
+  /* ── Content typography ── */
+  h2 { font-family: "Red Hat Display", sans-serif; font-size: 22px; font-weight: 700; margin: 32px 0 12px; color: #151515; }
+  h2:first-child { margin-top: 0; }
+  h3 { font-family: "Red Hat Display", sans-serif; font-size: 18px; font-weight: 600; margin: 24px 0 8px; }
+  p  { margin: 0 0 16px; color: #333; }
+  a  { color: #0066cc; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  ul.content-list { margin: 0 0 16px 20px; }
+  ul.content-list li { margin-bottom: 6px; color: #333; }
+
+  /* ── Versioned objectives: vertical tabs ── */
+  .objectives-section { margin: 24px 0 0; }
+
+  .ver-wrapper input[type="radio"] { display: none; }
+
+  .note-box { background: #f5f5f5; border-left: 3px solid #ee0000; padding: 12px 16px; font-size: 14px; color: #333; margin: 0 0 20px; }
+
+  .versioned-block { display: flex; border: 1px solid #d2d2d2; border-radius: 4px; overflow: hidden; min-height: 420px; }
+
+  .ver-tab-bar {
+    display: flex; flex-direction: column;
+    background: #f5f5f5; border-right: 1px solid #d2d2d2;
+    min-width: 170px; flex-shrink: 0;
+  }
+  .ver-tab-bar label {
+    padding: 14px 20px;
+    font-size: 14px; font-weight: 500; color: #6a6e73;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    border-bottom: 1px solid #e0e0e0;
+    transition: all .15s; white-space: nowrap;
+  }
+  .ver-tab-bar label:last-child { border-bottom: none; }
+  .ver-tab-bar label:hover { background: #ebebeb; color: #151515; }
+
+  #ver-422:checked ~ .versioned-block .ver-tab-bar label[for="ver-422"],
+  #ver-418:checked ~ .versioned-block .ver-tab-bar label[for="ver-418"],
+  #ver-414:checked ~ .versioned-block .ver-tab-bar label[for="ver-414"] {
+    background: #fff; color: #151515; font-weight: 600;
+    border-left-color: #ee0000;
+    border-right: 1px solid #fff; margin-right: -1px;
+  }
+
+  .ver-content { flex: 1; padding: 24px 28px; display: none; overflow-y: auto; }
+
+  #ver-422:checked ~ .versioned-block .ver-content.content-422,
+  #ver-418:checked ~ .versioned-block .ver-content.content-418,
+  #ver-414:checked ~ .versioned-block .ver-content.content-414 { display: block; }
+
+  .ver-content .ver-intro { font-size: 14px; color: #6a6e73; margin-bottom: 16px; font-style: italic; }
+
+  .ver-content ul { margin: 0; padding: 0; list-style: none; }
+  .ver-content > ul > li { margin-bottom: 16px; font-weight: 600; font-size: 15px; color: #151515; }
+  .ver-content > ul > li > ul { margin: 6px 0 0 22px; list-style: disc; }
+  .ver-content > ul > li > ul > li { font-weight: 400; font-size: 14px; color: #333; margin-bottom: 4px; }
+
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; margin-left: 8px; vertical-align: middle; }
+  .badge-current { background: #e7f5e2; color: #1e7e34; }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .exam-header { padding: 32px 24px 0; }
+    .exam-title { font-size: 28px; }
+    .top-tab-bar { padding: 0 24px; }
+    .tab-panel { padding: 32px 24px 48px; }
+    .versioned-block { flex-direction: column; }
+    .ver-tab-bar { flex-direction: row; min-width: auto; border-right: none; border-bottom: 1px solid #d2d2d2; overflow-x: auto; }
+    .ver-tab-bar label { border-left: none; border-bottom: 3px solid transparent; flex-shrink: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <!-- ── Header ── -->
+  <div class="exam-header">
+    <div class="exam-sku">EX280</div>
+    <h1 class="exam-title">Red Hat Certified System Administrator in OpenShift exam</h1>
+  </div>
+
+  <!-- ── Tabs ── -->
+  <div class="tabs-wrapper">
+    <input type="radio" class="top-radio" name="top" id="top-overview" checked>
+    <input type="radio" class="top-radio" name="top" id="top-readiness">
+    <input type="radio" class="top-radio" name="top" id="top-whatsnext">
+
+    <div class="top-tab-bar">
+      <label for="top-overview">Overview</label>
+      <label for="top-readiness">Readiness</label>
+      <label for="top-whatsnext">What's Next</label>
+    </div>
+
+    <!-- ═══════════ TAB 1: OVERVIEW ═══════════ -->
+    <div class="tab-panel panel-overview">
+
+      <h2>Exam Description</h2>
+      <p>The Red Hat Certified System Administrator in OpenShift exam (EX280) tests the knowledge, skills, and ability to create, configure, and manage a cloud application platform using Red Hat OpenShift Container Platform.</p>
+      <p>By passing this exam, you become a Red Hat Certified System Administrator in OpenShift that also counts towards earning a Red Hat Certified Architect in OpenShift.</p>
+      <p>Earning a passing score on this exam is a requirement to attain the Red Hat Certified System Administrator in OpenShift certification.</p>
+
+      <h2>Exam Format</h2>
+      <p>This is a hands-on, practical exam. Rather than answering multiple-choice questions, you are required to perform routine system tasks on a live system to meet specific objective criteria.</p>
+      <p>Relevant product documentation is provided during the test, but you must complete the tasks without outside assistance.</p>
+
+      <h2>Exam Delivery</h2>
+      <p>Exam results are reported via email from Red Hat Certification Central. Red Hat does not authorize examiners or training partners to report results to candidates directly. Scores on the exam are usually reported within 3 U.S. business days.</p>
+      <p>Exam results are reported as total scores. Red Hat does not report performance on individual items, nor will it provide additional information upon request.</p>
+      <p>Be sure to review the <a href="#">Red Hat Certification Program Guide</a> to ensure you are familiar with all official policies and exam procedures before booking your session.</p>
+
+      <h2>Target Audience</h2>
+      <ul class="content-list">
+        <li>System Administrators who need to support the initial setup, configuration, and ongoing maintenance of an OpenShift cluster, including managing authentication, users, and network security.</li>
+        <li>Site Reliability Engineers responsible for ensuring high service availability by monitoring, assessing cluster health, troubleshooting, and maintaining ongoing cluster operations.</li>
+        <li>Platform Engineers responsible for configuring OpenShift to ensure developer teams have access to self-service tools, application delivery pipelines, and reliable cloud infrastructure.</li>
+        <li>Application Developers working in a DevOps environment who need to deploy applications, configure container resource manifests (YAML, Kustomize, Helm), and expose services on Red Hat OpenShift.</li>
+        <li>Infrastructure Engineers responsible for managing Kubernetes resources, evaluating cluster status, and maintaining the OpenShift platform.</li>
+      </ul>
+
+      <p>The time limit for this exam is 3.0 hours.</p>
+    </div>
+
+    <!-- ═══════════ TAB 2: READINESS ═══════════ -->
+    <div class="tab-panel panel-readiness">
+
+      <p>The following objectives outline the tasks you will be expected to perform on the exam. Please note that there are multiple versions of the exam available so you should select the objectives that match the version of the exam you plan to take. You may select the version of the exam you take when you schedule your exam.</p>
+
+      <!-- ── Versioned Objectives ── -->
+      <div class="objectives-section">
+        <h2>Exam Objectives</h2>
+
+        <div class="ver-wrapper">
+          <input type="radio" name="version" id="ver-422" checked>
+          <input type="radio" name="version" id="ver-418">
+          <input type="radio" name="version" id="ver-414">
+
+          <div class="versioned-block">
+            <div class="ver-tab-bar">
+              <label for="ver-422">OCP 4.22 <span class="badge badge-current">Current</span></label>
+              <label for="ver-418">OCP 4.18</label>
+              <label for="ver-414">OCP 4.14</label>
+            </div>
+
+            <!-- ── OCP 4.22 ── -->
+            <div class="ver-content content-422">
+              <p class="ver-intro">This exam is based on Red Hat&reg; OpenShift&reg; Container Platform 4.22.</p>
+              <ul>
+                <li>Manage OpenShift Container Platform
+                  <ul>
+                    <li>Use the web console to manage and configure an OpenShift cluster</li>
+                    <li>Use the command-line interface to manage and configure an OpenShift cluster</li>
+                    <li>Create and delete projects</li>
+                    <li>Locate and examine container images</li>
+                    <li>Identify images using tags and digests</li>
+                    <li>Query, format, and filter attributes of Kubernetes resources</li>
+                    <li>Import, export, and configure Kubernetes resources</li>
+                    <li>Examine resources and cluster status</li>
+                    <li>Monitor cluster events and alerts</li>
+                    <li>View logs</li>
+                    <li>Assess the health of an OpenShift cluster</li>
+                    <li>Troubleshoot common container, pod, and cluster events and alerts</li>
+                    <li>Use product documentation</li>
+                    <li>Be prepared to perform all tasks of a Red Hat Certified Technologist in OpenShift</li>
+                  </ul>
+                </li>
+                <li>Work with resource manifests
+                  <ul>
+                    <li>Deploy applications from YAML resource manifests</li>
+                    <li>Update application deployments</li>
+                    <li>Deploy applications using Kustomize</li>
+                    <li>Work with Kustomize overlays</li>
+                    <li>Create and use secrets</li>
+                    <li>Create and use configuration maps</li>
+                  </ul>
+                </li>
+                <li>Deploy applications
+                  <ul>
+                    <li>Deploy applications from templates and Helm charts</li>
+                    <li>Manage application deployments</li>
+                    <li>Work with replica sets</li>
+                    <li>Work with labels and selectors</li>
+                    <li>Configure services</li>
+                    <li>Expose applications to external access</li>
+                  </ul>
+                </li>
+                <li>Manage authentication and authorization
+                  <ul>
+                    <li>Configure the HTPasswd identity provider for authentication</li>
+                    <li>Create and delete users</li>
+                    <li>Modify user passwords</li>
+                    <li>Create and manage groups</li>
+                    <li>Modify user and group permissions</li>
+                  </ul>
+                </li>
+                <li>Configure network security
+                  <ul>
+                    <li>Configure networking components</li>
+                    <li>Troubleshoot software defined networking</li>
+                    <li>Create and edit external routes</li>
+                    <li>Control cluster network ingress</li>
+                    <li>Secure external and internal traffic using TLS certificates</li>
+                    <li>Configure application network policies</li>
+                  </ul>
+                </li>
+                <li>Expose non-HTTP/SNI Applications
+                  <ul>
+                    <li>Configure a load balancer service</li>
+                    <li>Configure external application access</li>
+                  </ul>
+                </li>
+                <li>Enable developer self-service
+                  <ul>
+                    <li>Configure cluster resource quotas</li>
+                    <li>Configure project quotas</li>
+                    <li>Configure project resource requirements</li>
+                    <li>Configure project limit ranges</li>
+                    <li>Configure project templates</li>
+                  </ul>
+                </li>
+                <li>Manage OpenShift operators
+                  <ul>
+                    <li>Install an operator</li>
+                    <li>Uninstall an operator</li>
+                    <li>Delete an operator</li>
+                  </ul>
+                </li>
+                <li>Configure application security
+                  <ul>
+                    <li>Configure and manage service accounts</li>
+                    <li>Run privileged applications</li>
+                    <li>Manage and apply permissions using security context constraints</li>
+                    <li>Create and apply secrets to manage sensitive information</li>
+                    <li>Configure application access to Kubernetes APIs</li>
+                    <li>Deploy jobs to perform one-time tasks</li>
+                    <li>Configure Kubernetes cron jobs</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <!-- ── OCP 4.18 ── -->
+            <div class="ver-content content-418">
+              <p class="ver-intro">This exam is based on Red Hat&reg; OpenShift&reg; Container Platform 4.18.</p>
+              <ul>
+                <li>Manage OpenShift Container Platform
+                  <ul>
+                    <li>Use the web console to manage and configure an OpenShift cluster</li>
+                    <li>Use the command-line interface to manage and configure an OpenShift cluster</li>
+                    <li>Create and delete projects</li>
+                    <li>Locate and examine container images</li>
+                    <li>Identify images using tags and digests</li>
+                    <li>Query, format, and filter attributes of Kubernetes resources</li>
+                    <li>Import, export, and configure Kubernetes resources</li>
+                    <li>Examine resources and cluster status</li>
+                    <li>Monitor cluster events and alerts</li>
+                    <li>View logs</li>
+                    <li>Assess the health of an OpenShift cluster</li>
+                    <li>Troubleshoot common container, pod, and cluster events and alerts</li>
+                    <li>Use product documentation</li>
+                    <li>Be prepared to perform all tasks of a Red Hat Certified Technologist in OpenShift</li>
+                  </ul>
+                </li>
+                <li>Declarative Resource Management</li>
+                <li>Work with resource manifests
+                  <ul>
+                    <li>Deploy applications from YAML resource manifests</li>
+                    <li>Update application deployments</li>
+                    <li>Deploy applications using Kustomize</li>
+                    <li>Work with Kustomize overlays</li>
+                    <li>Create and use secrets</li>
+                    <li>Create and use configuration maps</li>
+                  </ul>
+                </li>
+                <li>Deploy applications
+                  <ul>
+                    <li>Deploy applications from templates and Helm charts</li>
+                    <li>Manage application deployments</li>
+                    <li>Work with replica sets</li>
+                    <li>Work with labels and selectors</li>
+                    <li>Configure services</li>
+                    <li>Expose applications to external access</li>
+                  </ul>
+                </li>
+                <li>Manage authentication and authorization
+                  <ul>
+                    <li>Configure the HTPasswd identity provider for authentication</li>
+                    <li>Create and delete users</li>
+                    <li>Modify user passwords</li>
+                    <li>Create and manage groups</li>
+                    <li>Modify user and group permissions</li>
+                  </ul>
+                </li>
+                <li>Configure network security
+                  <ul>
+                    <li>Configure networking components</li>
+                    <li>Troubleshoot software defined networking</li>
+                    <li>Create and edit external routes</li>
+                    <li>Control cluster network ingress</li>
+                    <li>Secure external and internal traffic using TLS certificates</li>
+                    <li>Configure application network policies</li>
+                  </ul>
+                </li>
+                <li>Expose non-HTTP/SNI Applications
+                  <ul>
+                    <li>Configure a load balancer service</li>
+                    <li>Configure external application access</li>
+                  </ul>
+                </li>
+                <li>Enable developer self-service
+                  <ul>
+                    <li>Configure cluster resource quotas</li>
+                    <li>Configure project quotas</li>
+                    <li>Configure project resource requirements</li>
+                    <li>Configure project limit ranges</li>
+                    <li>Configure project templates</li>
+                  </ul>
+                </li>
+                <li>Manage OpenShift operators
+                  <ul>
+                    <li>Install an operator</li>
+                    <li>Uninstall an operator</li>
+                    <li>Delete an operator</li>
+                  </ul>
+                </li>
+                <li>Configure application security
+                  <ul>
+                    <li>Configure and manage service accounts</li>
+                    <li>Run privileged applications</li>
+                    <li>Manage and apply permissions using security context constraints</li>
+                    <li>Create and apply secrets to manage sensitive information</li>
+                    <li>Configure application access to Kubernetes APIs</li>
+                    <li>Deploy jobs to perform one-time tasks</li>
+                    <li>Configure Kubernetes cron jobs</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <!-- ── OCP 4.14 ── -->
+            <div class="ver-content content-414">
+              <p class="ver-intro">This exam is based on Red Hat&reg; OpenShift&reg; Container Platform 4.14.</p>
+              <ul>
+                <li>Manage OpenShift Container Platform
+                  <ul>
+                    <li>Use the web console to manage and configure an OpenShift cluster</li>
+                    <li>Use the command-line interface to manage and configure an OpenShift cluster</li>
+                    <li>Create and delete projects</li>
+                    <li>Locate and examine container images</li>
+                    <li>Query, format, and filter attributes of Kubernetes resources</li>
+                    <li>Import, export, and configure Kubernetes resources</li>
+                    <li>Examine resources and cluster status</li>
+                    <li>Monitor cluster events and alerts</li>
+                    <li>View logs</li>
+                    <li>Assess the health of an OpenShift cluster</li>
+                    <li>Troubleshoot common container, pod, and cluster events and alerts</li>
+                    <li>Use product documentation</li>
+                  </ul>
+                </li>
+                <li>Deploy applications
+                  <ul>
+                    <li>Deploy applications from images and templates</li>
+                    <li>Deploy jobs to perform one-time tasks</li>
+                    <li>Manage application deployments</li>
+                    <li>Work with replica sets</li>
+                    <li>Work with labels and selectors</li>
+                    <li>Configure services</li>
+                    <li>Expose applications to external access</li>
+                    <li>Manage storage for application configuration and data</li>
+                    <li>Create and use secrets</li>
+                    <li>Create and use configuration maps</li>
+                  </ul>
+                </li>
+                <li>Provision persistent storage volumes for block and file-based data
+                  <ul>
+                    <li>Use storage classes</li>
+                    <li>Manage non-shared storage with stateful sets</li>
+                  </ul>
+                </li>
+                <li>Configure applications for reliability
+                  <ul>
+                    <li>Configure and use health probes</li>
+                    <li>Reserve and limit application compute capacity</li>
+                    <li>Scale applications to meet increased demand</li>
+                  </ul>
+                </li>
+                <li>Manage application updates
+                  <ul>
+                    <li>Identify images using tags and digests</li>
+                    <li>Roll back failed deployments</li>
+                    <li>Manage image streams</li>
+                    <li>Use triggers to manage images</li>
+                  </ul>
+                </li>
+                <li>Manage authentication and authorization
+                  <ul>
+                    <li>Configure the HTPasswd identity provider for authentication</li>
+                    <li>Create and delete users</li>
+                    <li>Modify user passwords</li>
+                    <li>Create and manage groups</li>
+                    <li>Modify user and group permissions</li>
+                  </ul>
+                </li>
+                <li>Configure network security
+                  <ul>
+                    <li>Configure networking components</li>
+                    <li>Troubleshoot software defined networking</li>
+                    <li>Create and edit external routes</li>
+                    <li>Control cluster network ingress</li>
+                    <li>Secure external and internal traffic using TLS certificates</li>
+                    <li>Configure application network policies</li>
+                  </ul>
+                </li>
+                <li>Enable developer self-service
+                  <ul>
+                    <li>Configure cluster resource quotas</li>
+                    <li>Configure project quotas</li>
+                    <li>Configure project resource requirements</li>
+                    <li>Configure project limit ranges</li>
+                    <li>Configure project templates</li>
+                  </ul>
+                </li>
+                <li>Manage OpenShift operators
+                  <ul>
+                    <li>Install an operator</li>
+                    <li>Uninstall an operator</li>
+                    <li>Delete an operator</li>
+                  </ul>
+                </li>
+                <li>Configure application security
+                  <ul>
+                    <li>Configure and manage service accounts</li>
+                    <li>Run privileged applications</li>
+                    <li>Manage and apply permissions using security context constraints</li>
+                    <li>Create and apply secrets to manage sensitive information</li>
+                    <li>Configure application access to Kubernetes APIs</li>
+                    <li>Configure Kubernetes cron jobs</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+          </div><!-- /versioned-block -->
+        </div><!-- /ver-wrapper -->
+      </div><!-- /objectives-section -->
+
+      <h2>Performance Rule</h2>
+      <p>As with all Red Hat performance-based exams, configurations and services must persist and remain functional across the normal lifecycle of the platform without requiring manual intervention to restore or start them.</p>
+
+      <h2>Recommended Preparation</h2>
+      <p>Candidates for this exam should:</p>
+      <ul class="content-list">
+        <li>Have taken Red Hat System Administration I (RH124) or have comparable experience. <a href="#">Red Hat Certified System Administrator (RHCSA)</a> is strongly recommended but not required.</li>
+        <li>Have taken Red Hat OpenShift Administration I: Containers &amp; Kubernetes (DO180) course or have comparable work experience using OpenShift Container Platform</li>
+        <li>Have taken Red Hat OpenShift Administration II: Operating a Production Kubernetes Cluster (DO280) course or have comparable work experience using OpenShift Container Platform</li>
+        <li>Review the Red Hat Certified System Administrator in OpenShift exam (EX280) objectives</li>
+        <li>Experience with container technology is recommended</li>
+      </ul>
+      <p>We recommend completing our no-cost skills assessment before enrolling in any Red Hat Training or Certification. <a href="#">Learn more</a>.</p>
+
+    </div>
+
+    <!-- ═══════════ TAB 3: WHAT'S NEXT ═══════════ -->
+    <div class="tab-panel panel-whatsnext">
+
+      <p>Find your path forward. Explore recommended courses and certifications tailored to your experience level and career goals. <a href="#">View skills paths</a>.</p>
+
+      <h2>Impact Statement</h2>
+      <p>A Red Hat Certified System Administrator or Red Hat Certified Developer has demonstrated the baseline hands-on skills required to independently run production workloads, whether managing enterprise systems or building and deploying containerized applications. Because every Red Hat exam is performance-based, this credential tells an employer the holder has actually done the work, not answered questions about it. Holders of this credential are ready to carry out production responsibilities.</p>
+
+      <h2>Scores and Reporting</h2>
+      <p>Official scores for exams come exclusively from Red Hat Certification Central. Red Hat does not authorize examiners or training partners to report results to candidates directly. Scores on the exam are usually reported within 3 U.S. business days. Exam results are reported as total scores. Red Hat does not report performance on individual items, nor will it provide additional information upon request.</p>
+    </div>
+
+  </div><!-- /tabs-wrapper -->
+</div><!-- /page-wrapper -->
+
+</body>
+</html>
